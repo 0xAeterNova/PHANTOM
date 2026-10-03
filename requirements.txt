@@ -1,0 +1,3 @@
+# Complete native real-time development installation (Windows or Linux).
+# Dependency versions and Python compatibility bounds are defined in pyproject.toml.
+-e .[api,demo,realtime,audio-ml,dev]

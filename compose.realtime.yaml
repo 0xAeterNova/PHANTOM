@@ -1,0 +1,20 @@
+# Merge with docker-compose.yml; the browser and security defaults are shared.
+services:
+  phantom:
+    build:
+      target: realtime
+    image: project-phantom:realtime
+    environment:
+      PHANTOM_CONFIG: /app/configs/realtime_cpu.yaml
+    volumes:
+      - phantom-models:/var/lib/phantom
+    mem_limit: ${PHANTOM_REAL_MEMORY:-8g}
+    cpus: ${PHANTOM_REAL_CPUS:-4.0}
+    healthcheck:
+      # Initial network downloads and model warm-up can exceed several minutes.
+      # This checks HTTP liveness; container_smoke.py checks real model readiness.
+      start_period: 30m
+    stop_grace_period: 30s
+
+volumes:
+  phantom-models:

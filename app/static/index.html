@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Project PHANTOM — a consent-first, multimodal conversational AI research prototype."
+    />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'self'; img-src 'self' blob: data:; media-src 'self' blob: data:; style-src 'self'; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
+    <title>Project PHANTOM · Emotion-aware conversation</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to conversation</a>
+
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Project PHANTOM home">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-core"></span>
+        </span>
+        <span>
+          <strong>PHANTOM</strong>
+          <small>Multimodal AI companion</small>
+        </span>
+      </a>
+
+      <div class="runtime-cluster" aria-label="Application status">
+        <span id="mode-badge" class="status-badge status-badge--pending">
+          <span class="status-dot" aria-hidden="true"></span>
+          Checking mode
+        </span>
+        <span id="service-status" class="service-status" role="status" aria-live="polite">
+          Connecting to local service…
+        </span>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section id="consent-view" class="consent-shell" aria-labelledby="consent-title">
+        <div class="consent-intro">
+          <p class="eyebrow"><span></span> Consent comes first</p>
+          <h1 id="consent-title">A conversation that can listen and knows its limits.</h1>
+          <p class="hero-copy">
+            PHANTOM combines your words with optional voice and facial-expression signals to adapt
+            its tone. You choose which sensors are used, and you can end and delete the session at
+            any time.
+          </p>
+
+          <div class="principle-grid" aria-label="Privacy principles">
+            <article>
+              <span class="principle-number">01</span>
+              <h2>Local by design</h2>
+              <p>Captured media is sent only to this PHANTOM service for immediate analysis.</p>
+            </article>
+            <article>
+              <span class="principle-number">02</span>
+              <h2>Uncertain by nature</h2>
+              <p>Emotion and age outputs are estimates—not facts, diagnoses, or identity checks.</p>
+            </article>
+            <article>
+              <span class="principle-number">03</span>
+              <h2>Easy to revoke</h2>
+              <p>Stop &amp; delete closes sensors, clears the screen, and removes the server session.</p>
+            </article>
+          </div>
+        </div>
+
+        <form id="consent-form" class="consent-card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Session permissions</p>
+              <h2>Choose what PHANTOM may use</h2>
+            </div>
+            <span class="local-pill">No raw-media storage</span>
+          </div>
+
+          <fieldset>
+            <legend class="visually-hidden">Data permissions</legend>
+
+            <label class="consent-option" for="consent-text">
+              <span class="option-icon" aria-hidden="true">Aa</span>
+              <span class="option-copy">
+                <strong>Message analysis</strong>
+                <small>Required for spoken transcripts and typed chat.</small>
+              </span>
+              <span class="switch">
+                <input id="consent-text" name="text_analysis" type="checkbox" />
+                <span aria-hidden="true"></span>
+              </span>
+            </label>
+
+            <label class="consent-option" for="consent-microphone">
+              <span class="option-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img"><path d="M12 15.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 1 0-7 0v6a3.5 3.5 0 0 0 3.5 3.5Zm-6-4a1 1 0 1 0-2 0 8 8 0 0 0 7 7.93V22H8.5a1 1 0 1 0 0 2h7a1 1 0 1 0 0-2H13v-2.57A8 8 0 0 0 20 11.5a1 1 0 1 0-2 0 6 6 0 0 1-12 0Z" /></svg>
+              </span>
+              <span class="option-copy">
+                <strong>Microphone</strong>
+                <small>Used only while you hold the push-to-talk control.</small>
+              </span>
+              <span class="switch">
+                <input id="consent-microphone" name="microphone" type="checkbox" />
+                <span aria-hidden="true"></span>
+              </span>
+            </label>
+
+            <label class="consent-option" for="consent-camera">
+              <span class="option-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img"><path d="M8.5 5 10 3h4l1.5 2H19a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h3.5ZM12 18a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" /></svg>
+              </span>
+              <span class="option-copy">
+                <strong>Camera</strong>
+                <small>Snapshots are analyzed one at a time at the configured local cadence.</small>
+              </span>
+              <span class="switch">
+                <input id="consent-camera" name="camera" type="checkbox" />
+                <span aria-hidden="true"></span>
+              </span>
+            </label>
+
+            <label id="age-consent-option" class="consent-option consent-option--nested" for="consent-age">
+              <span class="option-icon" aria-hidden="true">≈</span>
+              <span class="option-copy">
+                <strong>Approximate age analysis</strong>
+                <small>Optional and never used as reliable personal information.</small>
+              </span>
+              <span class="switch">
+                <input id="consent-age" name="age_analysis" type="checkbox" disabled />
+                <span aria-hidden="true"></span>
+              </span>
+            </label>
+          </fieldset>
+
+          <div id="consent-error" class="inline-alert inline-alert--error" role="alert" hidden></div>
+
+          <button id="start-session" class="button button--primary button--wide" type="submit">
+            <span>Start a private session</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13.4 5.3 6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 1 1-1.4-1.4l4.3-4.3H5a1 1 0 1 1 0-2h11.3L12 6.7a1 1 0 0 1 1.4-1.4Z" /></svg>
+          </button>
+          <p class="form-note">
+            Your browser will ask for camera or microphone access only after you grant the matching
+            permission here. Microphone access begins on your first push-to-talk.
+          </p>
+        </form>
+      </section>
+
+      <section id="workspace-view" class="workspace" aria-label="PHANTOM conversation" hidden>
+        <aside class="sensor-panel">
+          <div class="panel-title-row">
+            <div>
+              <p class="eyebrow">Perception</p>
+              <h1>Primary user</h1>
+            </div>
+            <span id="camera-live-badge" class="camera-badge camera-badge--off">Camera off</span>
+          </div>
+
+          <div id="camera-source-control" class="camera-source-control" hidden>
+            <label for="camera-source">Camera source</label>
+            <select id="camera-source" aria-describedby="camera-source-status" disabled>
+              <option value="">Waiting for camera permission</option>
+            </select>
+            <span id="camera-source-status" role="status" aria-live="polite">
+              Camera access has not started.
+            </span>
+          </div>
+
+          <div id="camera-frame" class="camera-frame">
+            <video id="camera-preview" autoplay muted playsinline aria-label="Live camera preview"></video>
+            <canvas id="vision-canvas" hidden></canvas>
+            <div id="camera-placeholder" class="camera-placeholder">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 5 10 3h4l1.5 2H19a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3h3.5ZM12 18a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0-2a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" /></svg>
+              <strong>Camera not active</strong>
+              <span>Typed chat remains available.</span>
+            </div>
+            <div class="face-guide" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            <div class="camera-scan" aria-hidden="true"></div>
+            <div class="camera-caption">
+              <span class="privacy-dot" aria-hidden="true"></span>
+              <span id="camera-caption-text">No frames are being analyzed</span>
+            </div>
+          </div>
+
+          <div id="face-warning" class="inline-alert inline-alert--warning" role="status" aria-live="polite" hidden></div>
+
+          <section class="estimate-card" aria-labelledby="estimates-title">
+            <div class="estimate-heading">
+              <div>
+                <p class="eyebrow">Live context</p>
+                <h2 id="estimates-title">Signal estimates</h2>
+              </div>
+              <button id="estimate-info" class="icon-button" type="button" aria-label="About these estimates" aria-expanded="false" aria-controls="estimate-notice">i</button>
+            </div>
+            <p id="estimate-notice" class="estimate-notice">
+              These outputs are probabilistic observations, not facts or medical assessments. Your
+              words always take priority.
+            </p>
+
+            <div class="estimate-row">
+              <span class="estimate-symbol estimate-symbol--face" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Zm0-2a8 8 0 1 1 0-16 8 8 0 0 1 0 16ZM8 9.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Zm8 0A1.25 1.25 0 1 0 16 7a1.25 1.25 0 0 0 0 2.5Zm-7.8 3.1a1 1 0 0 0-1.7 1.05A6.5 6.5 0 0 0 12 17a6.5 6.5 0 0 0 5.5-3.35 1 1 0 1 0-1.7-1.05A4.52 4.52 0 0 1 12 15a4.52 4.52 0 0 1-3.8-2.4Z" /></svg>
+              </span>
+              <span class="estimate-copy">
+                <small>Facial expression</small>
+                <strong id="face-estimate">Waiting for a frame</strong>
+              </span>
+              <span id="face-confidence" class="confidence-pill">—</span>
+            </div>
+
+            <div class="estimate-row">
+              <span class="estimate-symbol estimate-symbol--voice" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 9a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0v-4a1 1 0 0 1 1-1Zm4-3a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1Zm4-4a1 1 0 0 1 1 1v18a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1Zm4 4a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1Zm4 3a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0v-4a1 1 0 0 1 1-1Z" /></svg>
+              </span>
+              <span class="estimate-copy">
+                <small>Voice characteristics</small>
+                <strong id="voice-estimate" aria-live="polite">Record a voice message</strong>
+              </span>
+              <span id="voice-confidence" class="confidence-pill">—</span>
+            </div>
+
+            <div class="estimate-row">
+              <span class="estimate-symbol estimate-symbol--age" aria-hidden="true">≈</span>
+              <span class="estimate-copy">
+                <small>Approximate age</small>
+                <strong id="age-estimate">Not enabled</strong>
+              </span>
+              <span id="age-confidence" class="confidence-pill">Estimate</span>
+            </div>
+          </section>
+
+          <section class="model-card" aria-labelledby="model-title">
+            <div class="model-heading">
+              <h2 id="model-title">Model status</h2>
+              <span id="model-overall" class="model-overall">Checking</span>
+            </div>
+            <div id="model-status-list" class="model-status-list" aria-live="polite">
+              <div><span>Vision</span><strong>Checking…</strong></div>
+              <div><span>Speech</span><strong>Checking…</strong></div>
+              <div><span>Conversation + voice</span><strong>Checking…</strong></div>
+            </div>
+          </section>
+        </aside>
+
+        <section class="conversation-panel">
+          <div class="conversation-header">
+            <div>
+              <p class="eyebrow">Conversation</p>
+              <h2>Speak freely. Stay in control.</h2>
+            </div>
+            <span id="session-state" class="session-chip">Session active</span>
+          </div>
+
+          <div id="conversation-history" class="conversation-history" aria-live="polite" aria-label="Conversation history">
+            <div id="empty-conversation" class="empty-conversation">
+              <span class="empty-orbit" aria-hidden="true"><span></span></span>
+              <h3>Ready when you are</h3>
+              <p>Hold the microphone button to speak, or type a message below.</p>
+              <p class="empty-note">PHANTOM is an AI companion—not a therapist or emergency service.</p>
+            </div>
+          </div>
+
+          <div id="processing-banner" class="processing-banner" role="status" aria-live="polite" hidden>
+            <span class="processing-spinner" aria-hidden="true"></span>
+            <span id="processing-text">Thinking with your words and available signals…</span>
+          </div>
+
+          <div class="composer">
+            <div id="recording-strip" class="recording-strip" hidden>
+              <span class="recording-dot" aria-hidden="true"></span>
+              <strong>Listening</strong>
+              <div class="waveform" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <time id="recording-time">00:00</time>
+              <span>Release to send for transcription</span>
+            </div>
+
+            <div id="recorded-audio-row" class="recorded-audio-row" hidden>
+              <span>Last recording</span>
+              <audio id="recorded-audio" controls preload="metadata"></audio>
+              <span id="audio-analysis-state" role="status" aria-live="polite">Ready</span>
+            </div>
+
+            <label for="message-input">Your message or editable transcript</label>
+            <textarea
+              id="message-input"
+              rows="3"
+              maxlength="10000"
+              placeholder="Type here, or hold the microphone to speak…"
+            ></textarea>
+
+            <div class="composer-actions">
+              <div class="talk-control">
+                <button id="push-to-talk" class="talk-button" type="button" disabled aria-pressed="false">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 0 0 3.5-3.5V6a3.5 3.5 0 1 0-7 0v6a3.5 3.5 0 0 0 3.5 3.5Zm-6-4a1 1 0 1 0-2 0 8 8 0 0 0 7 7.93V22H8.5a1 1 0 1 0 0 2h7a1 1 0 1 0 0-2H13v-2.57A8 8 0 0 0 20 11.5a1 1 0 1 0-2 0 6 6 0 0 1-12 0Z" /></svg>
+                  <span>Hold to talk</span>
+                </button>
+                <small id="talk-help">Push-to-talk records a local PCM WAV</small>
+              </div>
+
+              <button id="send-message" class="button button--primary" type="button" disabled>
+                <span>Send message</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.7 2.3a1 1 0 0 0-1.05-.23l-18 7a1 1 0 0 0 .08 1.9l7.16 2.15 2.15 7.16a1 1 0 0 0 .9.72h.06a1 1 0 0 0 .93-.64l7-18a1 1 0 0 0-.23-1.06ZM5.97 9.9l11.57-4.5-6.4 5.97L5.97 9.9Zm7.15 7.98-1.48-4.92 6-5.6-4.52 10.52Z" /></svg>
+              </button>
+            </div>
+
+            <div id="workspace-alert" class="inline-alert inline-alert--error" role="alert" hidden></div>
+          </div>
+
+          <footer class="session-footer">
+            <div>
+              <span class="shield-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5.05 3.4 9.77 8 11 4.6-1.23 8-5.95 8-11V5l-8-3Zm0 2.13 6 2.25V11c0 3.9-2.5 7.82-6 8.9-3.5-1.08-6-5-6-8.9V6.38l6-2.25ZM11 8v5.17l-1.59-1.58L8 13l4 4 5-5-1.41-1.41L13 13.17V8h-2Z" /></svg>
+              </span>
+              <p><strong>Ephemeral session</strong><span>Media is processed for this interaction and not kept by this interface.</span></p>
+            </div>
+            <button id="stop-session" class="button button--danger" type="button">
+              <span>Stop &amp; delete session</span>
+            </button>
+          </footer>
+        </section>
+      </section>
+    </main>
+
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>

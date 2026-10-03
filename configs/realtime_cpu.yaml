@@ -1,0 +1,99 @@
+# Real pretrained CPU profile for the audited PHANTOM laptop.
+# First use downloads model weights. Raw camera and microphone data are never saved.
+environment: local-real
+log_level: INFO
+max_upload_mb: 15
+request_timeout_seconds: 180.0
+session_ttl_seconds: 1800
+max_sessions: 20
+
+runtime:
+  mode: real
+  preload_models: true
+  save_audio: false
+  save_camera: false
+
+audio:
+  backend: huggingface
+  model_name: superb/wav2vec2-base-superb-er
+  revision: 441a7599c3b22107314dcbd9166621c5c83f2cc5
+  local_files_only: false
+  device: cpu
+  n_mels: 40
+  max_frames: 3000
+  # SUPERB was evaluated on four-class English IEMOCAP, not Arabic. These are
+  # four-label decision gates, not claims of Arabic calibration. Model
+  # confidence and recording quality remain separate so microphone quality is
+  # not penalized twice. A true near-tie is still excluded from fusion.
+  confidence_floor: 0.36
+  decision_margin_floor: 0.07
+  # A false anger claim is especially disruptive, so it requires stronger
+  # evidence than neutral/happy/sad while the Arabic CRNN is being collected.
+  angry_confidence_floor: 0.62
+  angry_decision_margin_floor: 0.22
+
+stt:
+  backend: faster-whisper
+  model_name: Systran/faster-whisper-base
+  device: cpu
+  compute_type: int8
+  language: ar
+  beam_size: 3
+
+vision:
+  backend: deepface
+  detector: opencv-haar
+  # Warm DeepFace emotion inference is fast on the audited CPU; a shorter
+  # capture cadence makes expression changes visible without overlapping calls.
+  analyze_interval_seconds: 0.75
+  age_interval_seconds: 20
+  max_staleness_seconds: 3
+
+llm:
+  backend: transformers
+  model_name: Qwen/Qwen2.5-0.5B-Instruct
+  revision: 7ae557604adf67be50417f59c2c2f167def9a775
+  device: cpu
+  # Dynamic int8 is supported as an opt-in provider setting, but eager
+  # quantization degraded this small checkpoint's response quality in the
+  # audited environment.  Keep the shipped conversational profile faithful.
+  quantization: none
+  # Qwen decoding is the dominant turn cost on the audited 8 GiB CPU-only
+  # laptop. Arabic supportive replies need enough space for validation, one
+  # gentle question, and a small optional next step. 48 tokens is the measured
+  # CPU-safe compromise; crisis replies remain deterministic and bypass it.
+  max_new_tokens: 48
+  # Greedy decoding is more stable and instruction-faithful for this small
+  # checkpoint than sampled replies on the audited CPU profile.
+  temperature: 0.0
+  max_history_turns: 8
+  timeout_seconds: 90
+
+tts:
+  # Replies containing Arabic letters use the pinned local Piper Jordanian
+  # voice; English-only replies use Windows SAPI natively or eSpeak NG on Linux.
+  backend: piper-hybrid
+  voice_id: null
+  rate: 170
+  piper_model_path: models/tts/ar_JO-kareem-low.onnx
+  piper_config_path: models/tts/ar_JO-kareem-low.onnx.json
+  piper_model_sha256: 2887e9d68b125965c747e1371fa21e1cef19555ea98d0795a0d5d71188b13890
+  piper_config_sha256: da328e52896826135508f797c1c77b45b35117e967c71befc377d654f100f328
+
+fusion:
+  weights:
+    audio: 0.8
+    vision: 0.6
+    text: 1.6
+  confidence_threshold: 0.45
+  contradiction_threshold: 0.65
+  quality_floor: 0.2
+
+safety:
+  country_code: JO
+  emergency_message: >-
+    If you may act on these thoughts or are in immediate danger, call Jordan's
+    unified emergency number 911 now or ask a trusted nearby person to stay with you.
+  resources:
+    - Jordan Public Security Directorate unified emergency number: 911.
+    - Jordan Ministry of Health service line: 06 500 4545.

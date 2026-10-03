@@ -1,0 +1,59 @@
+# Safe local defaults. Raw audio, images, video, and biometric embeddings are
+# never persisted by the core service.
+environment: development
+mock_mode: true
+log_level: INFO
+max_upload_mb: 10
+request_timeout_seconds: 30.0
+session_ttl_seconds: 1800
+max_sessions: 1000
+
+# The trainable spectrogram backends are opt-in and require a local checkpoint.
+# After training, choose `crnn` (CNN + bidirectional GRU) or `cnn` and set the
+# checkpoint path. Random/untrained neural weights are never activated.
+audio:
+  backend: heuristic
+  checkpoint: null
+  device: cpu
+  n_mels: 40
+  max_frames: 3000
+
+runtime:
+  mode: demo
+  preload_models: false
+  save_audio: false
+  save_camera: false
+
+stt:
+  backend: none
+
+vision:
+  backend: baseline
+  detector: opencv-haar
+  analyze_interval_seconds: 1.25
+  age_interval_seconds: 20
+  max_staleness_seconds: 3
+
+llm:
+  backend: demo
+  max_history_turns: 8
+
+tts:
+  backend: none
+
+fusion:
+  weights:
+    audio: 0.8
+    vision: 0.6
+    text: 1.6
+  confidence_threshold: 0.45
+  contradiction_threshold: 0.65
+  quality_floor: 0.2
+
+safety:
+  country_code: GLOBAL
+  emergency_message: >-
+    If you may act on these thoughts or are in immediate danger, contact local
+    emergency services now or ask a trusted nearby person to stay with you.
+  resources:
+    - Use a verified local crisis directory or your country's emergency service.

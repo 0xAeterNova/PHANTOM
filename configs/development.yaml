@@ -1,0 +1,32 @@
+# Developer profile: deterministic mocks, shorter sessions, and more verbose logs.
+environment: development
+mock_mode: true
+log_level: DEBUG
+max_upload_mb: 10
+request_timeout_seconds: 30.0
+session_ttl_seconds: 900
+max_sessions: 100
+
+audio:
+  backend: heuristic
+  checkpoint: null
+  device: cpu
+  n_mels: 40
+  max_frames: 3000
+
+fusion:
+  weights:
+    audio: 1.0
+    vision: 0.9
+    text: 0.8
+  confidence_threshold: 0.40
+  contradiction_threshold: 0.65
+  quality_floor: 0.2
+
+safety:
+  country_code: GLOBAL
+  emergency_message: >-
+    If you may act on these thoughts or are in immediate danger, contact local
+    emergency services now or ask a trusted nearby person to stay with you.
+  resources:
+    - Use a verified local crisis directory or your country's emergency service.

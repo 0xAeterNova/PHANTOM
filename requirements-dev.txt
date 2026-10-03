@@ -1,0 +1,5 @@
+# Editable core plus the API, local demo, and quality tooling.
+# ML dependencies are intentionally opt-in because PyTorch, OpenCV, and
+# Transformers are large and have tighter Python/platform compatibility.
+-e .[api,demo,dev]
+

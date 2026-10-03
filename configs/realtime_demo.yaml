@@ -1,0 +1,54 @@
+# Deterministic, clearly labelled demo profile. No pretrained model is invoked.
+environment: demonstration
+log_level: INFO
+max_upload_mb: 10
+request_timeout_seconds: 30.0
+session_ttl_seconds: 1800
+max_sessions: 100
+
+runtime:
+  mode: demo
+  preload_models: false
+  save_audio: false
+  save_camera: false
+
+audio:
+  backend: heuristic
+  checkpoint: null
+  device: cpu
+  n_mels: 40
+  max_frames: 3000
+
+stt:
+  backend: none
+
+vision:
+  backend: baseline
+  detector: opencv-haar
+  analyze_interval_seconds: 1.25
+  age_interval_seconds: 20
+  max_staleness_seconds: 3
+
+llm:
+  backend: demo
+  max_history_turns: 8
+
+tts:
+  backend: none
+
+fusion:
+  weights:
+    audio: 0.8
+    vision: 0.6
+    text: 1.6
+  confidence_threshold: 0.45
+  contradiction_threshold: 0.65
+  quality_floor: 0.2
+
+safety:
+  country_code: JO
+  emergency_message: >-
+    If you may act on these thoughts or are in immediate danger, call Jordan's
+    unified emergency number 911 now or ask a trusted nearby person to stay with you.
+  resources:
+    - Jordan Public Security Directorate unified emergency number: 911.
