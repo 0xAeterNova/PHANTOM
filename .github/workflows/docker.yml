@@ -45,7 +45,7 @@ jobs:
           docker compose -f docker-compose.yml -f compose.realtime.yaml config --quiet
 
       - name: Build image without publishing
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           target: ${{ matrix.target }}
