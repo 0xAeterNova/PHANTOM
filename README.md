@@ -1,7 +1,5 @@
 <p align="center">
-  <img src="assets/project_PHANTOM_key_art.png" alt="project PHANTOM" width="800">
 </p>
-
 <h1 align="center">project PHANTOM</h1>
 
 <p align="center">
@@ -199,10 +197,10 @@ Use **PowerShell** for this walkthrough. Complete the Windows prerequisites abov
 
 ### 1. Clone the repository and enter its directory
 
-Open PowerShell in the folder where you want to keep the project. Replace `YOUR_GITHUB_USERNAME` with the GitHub account that owns the published repository. If its name is different, update the repository name in the URL as well. The explicit destination keeps the local directory name consistent.
+Open PowerShell in the folder where you want to keep the project. Clone the repository from the `0xAeterNova` GitHub account, then enter the checkout directory. The explicit destination keeps the local directory name consistent.
 
 ```powershell
-git clone https://github.com/YOUR_GITHUB_USERNAME/project-phantom.git project-phantom
+git clone https://github.com/0xAeterNova/project-phantom.git project-phantom
 cd project-phantom
 ```
 
@@ -339,10 +337,10 @@ Use a regular terminal for this walkthrough. Complete the installation steps for
 
 ### 1. Clone the repository and enter its directory
 
-Replace `YOUR_GITHUB_USERNAME` with the account that owns the published repository. If necessary, change the repository name in the URL. The last argument sets the local directory name to `project-phantom`.
+Clone the repository from the `0xAeterNova` GitHub account, then enter the checkout directory. The last argument sets the local directory name to `project-phantom`.
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/project-phantom.git project-phantom
+git clone https://github.com/0xAeterNova/project-phantom.git project-phantom
 cd project-phantom
 ```
 
@@ -890,7 +888,7 @@ The simplest way to share PHANTOM is to publish the source repository with its D
 
 For maintainers:
 
-- Replace the example GitHub account in clone commands with the actual repository owner before publishing.
+- Keep the clone URLs aligned with `https://github.com/0xAeterNova/project-phantom` if the repository is renamed or moved.
 - Put the application files and `.github/` directory at the GitHub repository root, not inside an extra nested project folder.
 - Do not publish the application's parent directory if it contains unrelated proposals, presentations, archives, or participant materials.
 - Keep `.env`, credentials, recordings, model weights, datasets, caches, and image archives out of Git.
