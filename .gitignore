@@ -1,0 +1,76 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Python environments and generated artifacts
+.venv/
+.venv*/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test, type-check, lint, and coverage state
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.hypothesis/
+.mypy_cache/
+.pip-audit-cache/
+.pre-commit-cache/
+.pytest_cache/
+.ruff_cache/
+.tox/
+.nox/
+
+# Logs and local runtime state
+*.log
+logs/
+run/
+tmp/
+temp/
+
+# Datasets: retain only documentation and directory sentinels
+/data/*
+!/data/README.md
+!/data/raw/
+!/data/interim/
+!/data/processed/
+/data/raw/*
+/data/interim/*
+/data/processed/*
+!/data/raw/.gitkeep
+!/data/interim/.gitkeep
+!/data/processed/.gitkeep
+
+# Model weights, exports, and experiment outputs
+/models/*
+!/models/README.md
+/checkpoints/
+/artifacts/
+/mlruns/
+/wandb/
+
+# Docker image archives are release artifacts, not source files.
+/project-phantom*.tar
+/project-phantom*.tar.gz
+
+# Notebook checkpoints and editor/OS files
+.ipynb_checkpoints/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
