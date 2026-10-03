@@ -1,0 +1,114 @@
+name: Docker
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish_demo:
+        description: Publish the tested demo image to GitHub Container Registry
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  image:
+    name: Build and check ${{ matrix.target }} (Linux amd64)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [demo, realtime]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Validate Compose profiles
+        run: |
+          docker compose config --quiet
+          docker compose -f docker-compose.yml -f compose.realtime.yaml config --quiet
+
+      - name: Build image without publishing
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: ${{ matrix.target }}
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: project-phantom:${{ matrix.target }}
+          labels: org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+          cache-from: type=gha,scope=${{ matrix.target }}
+          cache-to: type=gha,scope=${{ matrix.target }},mode=max
+
+      - name: Check real dependency imports and headless English WAV (no downloads)
+        if: matrix.target == 'realtime'
+        run: |
+          docker run --rm --network none --read-only \
+            --tmpfs /tmp:rw,size=256m,mode=1777,noexec,nosuid,nodev \
+            --tmpfs /var/lib/phantom:rw,size=64m,mode=1777 \
+            --entrypoint python project-phantom:realtime -c '
+          import torch, tensorflow, tf_keras, cv2, faster_whisper
+          from deepface import DeepFace
+          from piper.voice import PiperVoice
+          from transformers import AutoModelForCausalLM, AutoModelForAudioClassification
+          from transformers import Qwen2ForCausalLM, Wav2Vec2ForSequenceClassification
+          from phantom.tts import EspeakNGTTS
+          assert torch.version.cuda is None, "CUDA wheel must not enter the CPU image"
+          speech = EspeakNGTTS().synthesize("PHANTOM container speech check.")
+          assert speech.audio_available and speech.audio_wav.startswith(b"RIFF")
+          print("CPU dependencies and real local English WAV: passed")
+          '
+
+      - name: Start hardened demo container
+        if: matrix.target == 'demo'
+        run: docker compose up -d --no-build --wait --wait-timeout 90
+
+      - name: Check integrated demo browser, reply, and session deletion
+        if: matrix.target == 'demo'
+        run: docker compose exec -T phantom python scripts/container_smoke.py --mode demo
+
+      - name: Show demo logs on failure
+        if: failure() && matrix.target == 'demo'
+        run: docker compose logs --no-color phantom
+
+      - name: Stop demo container
+        if: always() && matrix.target == 'demo'
+        run: docker compose down
+
+      # Full-image binary redistribution requires a separate license review.
+      # No package is published on pushes or pull requests.
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_demo && matrix.target == 'demo'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish tested demo image
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_demo && matrix.target == 'demo'
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          image="ghcr.io/${REPOSITORY,,}"
+          docker tag project-phantom:demo "${image}:demo"
+          docker tag project-phantom:demo "${image}:demo-${GITHUB_SHA}"
+          docker push "${image}:demo-${GITHUB_SHA}"
+          docker push "${image}:demo"

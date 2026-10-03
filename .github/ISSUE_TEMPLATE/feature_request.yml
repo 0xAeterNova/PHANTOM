@@ -1,0 +1,39 @@
+name: Feature request
+description: Propose a scoped enhancement, experiment, or responsible-AI control.
+title: "[Feature]: "
+labels: [enhancement, triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or research question
+      description: Explain the need without including personal or biometric data.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the user-visible behavior and acceptance criteria.
+    validations:
+      required: true
+
+  - type: textarea
+    id: safeguards
+    attributes:
+      label: Privacy, safety, and bias considerations
+      description: Cover consent, retention, uncertainty, misuse risk, and affected populations.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Product boundaries
+      options:
+        - label: The proposal does not present PHANTOM as a medical or diagnostic system.
+          required: true
+        - label: The proposal does not infer identity or definitive gender from appearance or voice.
+          required: true
+

@@ -1,0 +1,74 @@
+name: Bug report
+description: Report a reproducible defect that does not expose personal or biometric data.
+title: "[Bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not attach real recordings, face images, transcripts, credentials, or other personal data.
+        For a security vulnerability, follow SECURITY.md instead of filing a public issue.
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Data-safety check
+      options:
+        - label: I removed credentials and personal, biometric, or health-related data.
+          required: true
+        - label: This report is not a security vulnerability.
+          required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and its impact.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Use synthetic inputs only and include the exact command when possible.
+      placeholder: |
+        1. Install ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Project version or commit
+      placeholder: 0.1.0 or commit hash
+    validations:
+      required: true
+
+  - type: dropdown
+    id: python
+    attributes:
+      label: Python version
+      options:
+        - "3.11"
+        - "3.12"
+        - "3.13"
+        - "3.14 or newer (unsupported ML extras)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment details
+      description: Operating system, install extras, mock/real adapter, and relevant redacted logs.
+
