@@ -199,11 +199,11 @@ Use **PowerShell** for this walkthrough. Complete the Windows prerequisites abov
 
 ### 1. Clone the repository and enter its directory
 
-Open PowerShell in the folder where you want to keep the project. Clone the repository from the `0xAeterNova` GitHub account, then enter the checkout directory. The explicit destination keeps the local directory name consistent.
+Open PowerShell in the folder where you want to keep the project. Clone the repository from the `0xAeterNova` GitHub account, then enter the checkout directory. Git creates a local directory named `PHANTOM`.
 
 ```powershell
-git clone https://github.com/0xAeterNova/project-phantom.git project-phantom
-cd project-phantom
+git clone https://github.com/0xAeterNova/PHANTOM.git
+cd PHANTOM
 ```
 
 If you already cloned the repository, enter that existing folder instead of cloning it again. All remaining project commands run from the folder containing `Dockerfile` and `docker-compose.yml`.
@@ -339,11 +339,11 @@ Use a regular terminal for this walkthrough. Complete the installation steps for
 
 ### 1. Clone the repository and enter its directory
 
-Clone the repository from the `0xAeterNova` GitHub account, then enter the checkout directory. The last argument sets the local directory name to `project-phantom`.
+Clone the repository from the `0xAeterNova` GitHub account, then enter the checkout directory. Git creates a local directory named `PHANTOM`.
 
 ```bash
-git clone https://github.com/0xAeterNova/project-phantom.git project-phantom
-cd project-phantom
+git clone https://github.com/0xAeterNova/PHANTOM.git
+cd PHANTOM
 ```
 
 If you already have a checkout, enter that directory instead. Run the remaining commands from the folder containing the Dockerfile and Compose files.
@@ -855,7 +855,7 @@ Check the repository's Actions results and perform the real readiness and browse
 ## Repository structure
 
 ```text
-project-phantom/
+PHANTOM/
   .github/workflows/          CI, security, and Docker checks
   app/
     realtime.py              Integrated FastAPI application
@@ -890,8 +890,8 @@ The simplest way to share PHANTOM is to publish the source repository with its D
 
 For maintainers:
 
-- Keep the clone URLs aligned with `https://github.com/0xAeterNova/project-phantom` if the repository is renamed or moved.
-- Put the application files and `.github/` directory at the GitHub repository root, not inside an extra nested project folder.
+- Keep the clone URLs aligned with `https://github.com/0xAeterNova/PHANTOM` if the repository is renamed or moved.
+- Put the application files and `.github/` directory at the GitHub repository root, not inside an extra nested `PHANTOM/` folder.
 - Do not publish the application's parent directory if it contains unrelated proposals, presentations, archives, or participant materials.
 - Keep `.env`, credentials, recordings, model weights, datasets, caches, and image archives out of Git.
 - Run the included checks and review the actual results before attaching compatibility claims to a release.
