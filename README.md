@@ -1,5 +1,7 @@
 <p align="center">
+  <img src="assets/project_PHANTOM_key_art.png" alt="project PHANTOM" width="800">
 </p>
+
 <h1 align="center">project PHANTOM</h1>
 
 <p align="center">
