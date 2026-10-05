@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.14-slim-bookworm AS builder
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1 \
@@ -12,7 +12,7 @@ COPY src ./src
 RUN python -m pip wheel --wheel-dir /wheels ".[api]"
 
 
-FROM python:3.11-slim-bookworm AS app-base
+FROM python:3.14-slim-bookworm AS app-base
 
 LABEL org.opencontainers.image.title="Project PHANTOM" \
       org.opencontainers.image.description="Local consent-first browser research prototype"
