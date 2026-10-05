@@ -10,5 +10,5 @@ opencv-python==4.12.0.88
 tensorflow==2.21.0
 tf-keras==2.21.0
 transformers==4.57.6
-piper-tts==1.6.0
+piper-tts==1.8.0
 pyttsx3==2.99

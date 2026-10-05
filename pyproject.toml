@@ -57,7 +57,7 @@ realtime = [
   "deepface>=0.0.95,<1",
   "faster-whisper>=1.1,<2",
   "opencv-python>=4.10,<5",
-  "piper-tts==1.6.0",
+  "piper-tts==1.8.0",
   "pyttsx3>=2.98,<3",
   "python-dotenv>=1.0,<2",
   "torch>=2.4,<3",
